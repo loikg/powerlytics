@@ -1,0 +1,1610 @@
+[
+    {
+        "id": "918a6a197ce3a466",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "9dd6b84e939a9a5d",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "c8c78f4d.679e8",
+        "type": "subflow",
+        "name": "csvColumnParser",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 70,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "a8857356.d49e68"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 900,
+                "y": 80,
+                "wires": [
+                    {
+                        "id": "d71e0bef.46647",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": []
+    },
+    {
+        "id": "fd967d3c7c7fe0f8",
+        "type": "subflow",
+        "name": "Get OAuth tokens",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 120,
+                "y": 260,
+                "wires": [
+                    {
+                        "id": "9da4a7b772e85d33"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1200,
+                "y": 580,
+                "wires": [
+                    {
+                        "id": "9f60036fdd6f0b29",
+                        "port": 0
+                    }
+                ]
+            }
+        ],
+        "env": [
+            {
+                "name": "authorization_url",
+                "type": "env",
+                "value": "AUTHORIZATION_URL"
+            },
+            {
+                "name": "app_id",
+                "type": "env",
+                "value": "APP_ID"
+            },
+            {
+                "name": "token_url",
+                "type": "env",
+                "value": "TOKEN_URL"
+            }
+        ],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "7b38a77803fd0ba6",
+        "type": "subflow",
+        "name": "Refresh token",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 220,
+                "y": 180,
+                "wires": [
+                    {
+                        "id": "b8df90837ff01076"
+                    }
+                ]
+            }
+        ],
+        "out": [],
+        "env": [
+            {
+                "name": "token_url",
+                "type": "env",
+                "value": "TOKEN_URL"
+            },
+            {
+                "name": "app_id",
+                "type": "env",
+                "value": "APP_ID"
+            }
+        ],
+        "meta": {},
+        "color": "#DDAA99"
+    },
+    {
+        "id": "98593475dbf2438d",
+        "type": "subflow",
+        "name": "Make authenticated API call",
+        "info": "",
+        "category": "",
+        "in": [
+            {
+                "x": 120,
+                "y": 220,
+                "wires": [
+                    {
+                        "id": "0a01863cab2ae907"
+                    }
+                ]
+            }
+        ],
+        "out": [
+            {
+                "x": 1200,
+                "y": 200,
+                "wires": [
+                    {
+                        "id": "29fd4e25d8792fd4",
+                        "port": 1
+                    }
+                ]
+            },
+            {
+                "x": 1200,
+                "y": 260,
+                "wires": [
+                    {
+                        "id": "29fd4e25d8792fd4",
+                        "port": 2
+                    }
+                ]
+            }
+        ],
+        "env": [],
+        "meta": {},
+        "color": "#DDAA99",
+        "outputLabels": [
+            "sucess",
+            "failed"
+        ]
+    },
+    {
+        "id": "9987d621ed81fc30",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": "8086",
+        "protocol": "http",
+        "database": "mydb",
+        "name": "carbon_analytics",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "http://localhost:8086",
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "bd7a895cbe4aa276",
+        "type": "function",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "func": "return {payload: msg.payload.csvdata.slice(msg.payload.count), \nlength: msg.payload.csvdata.length, topic: 'data'}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "fs",
+                "module": "fs"
+            }
+        ],
+        "x": 1000,
+        "y": 480,
+        "wires": [
+            [
+                "8d7a3ffde573adb4",
+                "dfa65b56f68b71c7"
+            ]
+        ]
+    },
+    {
+        "id": "c1086df336ddf231",
+        "type": "inject",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "props": [],
+        "repeat": "120",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 90,
+        "y": 240,
+        "wires": [
+            [
+                "c63f9b377b939e59",
+                "c823079cd2087bee"
+            ]
+        ]
+    },
+    {
+        "id": "c63f9b377b939e59",
+        "type": "file in",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "filename": "metric.csv",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 360,
+        "y": 100,
+        "wires": [
+            [
+                "3111ebb4e60cee23"
+            ]
+        ]
+    },
+    {
+        "id": "3111ebb4e60cee23",
+        "type": "csv",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "none",
+        "multi": "mult",
+        "ret": "\\n",
+        "temp": "name,address,company",
+        "skip": "0",
+        "strings": false,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 430,
+        "y": 240,
+        "wires": [
+            [
+                "e6427d2fa7a8a4b9",
+                "1d70ef4d67b6682e"
+            ]
+        ]
+    },
+    {
+        "id": "edbe8b41436fc2f9",
+        "type": "join",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 790,
+        "y": 300,
+        "wires": [
+            [
+                "bd7a895cbe4aa276"
+            ]
+        ]
+    },
+    {
+        "id": "1d70ef4d67b6682e",
+        "type": "file in",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "filename": ".count",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": false,
+        "x": 470,
+        "y": 380,
+        "wires": [
+            [
+                "d5e765ad78942480"
+            ]
+        ]
+    },
+    {
+        "id": "e6427d2fa7a8a4b9",
+        "type": "function",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "func": "\nreturn {payload: msg.payload, topic: 'csvdata'};",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 240,
+        "wires": [
+            [
+                "edbe8b41436fc2f9"
+            ]
+        ]
+    },
+    {
+        "id": "d5e765ad78942480",
+        "type": "function",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "func": "\nreturn {payload: msg.payload, topic: 'count'};",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 620,
+        "y": 380,
+        "wires": [
+            [
+                "edbe8b41436fc2f9"
+            ]
+        ]
+    },
+    {
+        "id": "8d7a3ffde573adb4",
+        "type": "change",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "length",
+                "pt": "flow",
+                "to": "length",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1100,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c823079cd2087bee",
+        "type": "exec",
+        "z": "918a6a197ce3a466",
+        "command": " wmic nic where \"PhysicalAdapter=True and NetEnabled=True and NetConnectionId like '%Wi-Fi%'\" get MACAddress",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": true,
+        "oldrc": false,
+        "name": "Get mac address",
+        "x": 290,
+        "y": 560,
+        "wires": [
+            [
+                "7beeedd557c52ac5"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "1684862b1d8010b5",
+        "type": "change",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "topic",
+                "pt": "msg",
+                "to": "mac_id",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 820,
+        "y": 580,
+        "wires": [
+            [
+                "dfa65b56f68b71c7"
+            ]
+        ]
+    },
+    {
+        "id": "dfa65b56f68b71c7",
+        "type": "join",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "mode": "custom",
+        "build": "object",
+        "property": "payload",
+        "propertyType": "msg",
+        "key": "topic",
+        "joiner": "\\n",
+        "joinerType": "str",
+        "accumulate": false,
+        "timeout": "",
+        "count": "2",
+        "reduceRight": false,
+        "reduceExp": "",
+        "reduceInit": "",
+        "reduceInitType": "",
+        "reduceFixup": "",
+        "x": 1110,
+        "y": 640,
+        "wires": [
+            [
+                "390adaaabead681c"
+            ]
+        ]
+    },
+    {
+        "id": "390adaaabead681c",
+        "type": "change",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "url",
+                "pt": "msg",
+                "to": "$env('API_URL') & '/write?hostname=' & payload.mac_id\t",
+                "tot": "jsonata"
+            },
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "payload.data",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "headers.Authorization",
+                "pt": "msg",
+                "to": "\"Bearer \" & $globalContext(\"access_token\")\t",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1380,
+        "y": 500,
+        "wires": [
+            [
+                "9eef6cbe1d97cc91"
+            ]
+        ]
+    },
+    {
+        "id": "7beeedd557c52ac5",
+        "type": "function",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "func": "return {\n    ...msg,\n    payload: msg.payload.split('\\n')[1].trim()\n};",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 520,
+        "y": 580,
+        "wires": [
+            [
+                "1684862b1d8010b5"
+            ]
+        ]
+    },
+    {
+        "id": "1eedea938681ddca",
+        "type": "inject",
+        "z": "9dd6b84e939a9a5d",
+        "name": "",
+        "props": [],
+        "repeat": "60",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 250,
+        "y": 120,
+        "wires": [
+            [
+                "29a90a18a3230d34"
+            ]
+        ]
+    },
+    {
+        "id": "da00b98a8c22123a",
+        "type": "file in",
+        "z": "9dd6b84e939a9a5d",
+        "name": "",
+        "filename": "srumutil.csv",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "allProps": true,
+        "x": 850,
+        "y": 120,
+        "wires": [
+            [
+                "147051a79b1b8830"
+            ]
+        ]
+    },
+    {
+        "id": "147051a79b1b8830",
+        "type": "csv",
+        "z": "9dd6b84e939a9a5d",
+        "name": "",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "all",
+        "multi": "mult",
+        "ret": "\\r",
+        "temp": "AppId,TimeStamp,CPUEnergyConsumption,SocEnergyConsumption,DisplayEnergyConsumption,DiskEnergyConsumption,NetworkEnergyConsumption,TotalEnergyConsumption",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": "",
+        "include_null_values": "",
+        "x": 1010,
+        "y": 120,
+        "wires": [
+            [
+                "994d335ae3e82012"
+            ]
+        ]
+    },
+    {
+        "id": "67ba4c141dda7709",
+        "type": "function",
+        "z": "9dd6b84e939a9a5d",
+        "name": "Aggregate rows by appId",
+        "func": "var helper = {};\n\nconst getCurrentTimestamp = () => Math.round(new Date().getTime() / 1000)\n\nvar result = msg.payload.reduce(function(r, o) {\n  var key = o.AppId\n  \n  if(!helper[key]) {\n    helper[key] = Object.assign({}, o); // create a copy of o\n    helper[key].TimeStamp = getCurrentTimestamp();\n    r.push(helper[key]);\n  } else {\n    helper[key].TotalEnergyConsumption += o.TotalEnergyConsumption;\n    // helper[key].TimeStamp = o.TimeStamp\n    helper[key].TimeStamp = getCurrentTimestamp();\n    helper[key].CPUEnergyConsumption += o.CPUEnergyConsumption\n    helper[key].SocEnergyConsumption += o.SocEnergyConsumption\n    helper[key].DisplayEnergyConsumption += o.DisplayEnergyConsumption\n    helper[key].DiskEnergyConsumption += o.DiskEnergyConsumption\n    helper[key].NetworkEnergyConsumption += o.NetworkEnergyConsumption\n  }\n  return r;\n}, []);\n\nvar keys_to_keep = ['AppId','TimeStamp','CPUEnergyConsumption','SocEnergyConsumption','DisplayEnergyConsumption','DiskEnergyConsumption','NetworkEnergyConsumption','TotalEnergyConsumption']\n\ndata=result.map(element => {\n    return Object.assign({}, ...keys_to_keep.map(key => {\n        if (key == 'AppId') {\n            // Extract process name without it's extension eg /var/foo.exe becomes foo\n            return {[key]: path.parse(helper[element.AppId][key]).name}\n        }\n        return { [key]: helper[element.AppId][key] }\n    }))\n})\n\nreturn {\n    ...msg,\n    payload: data\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "path",
+                "module": "path"
+            }
+        ],
+        "x": 1770,
+        "y": 180,
+        "wires": [
+            [
+                "a60e1e18dfe24404"
+            ]
+        ]
+    },
+    {
+        "id": "a8857356.d49e68",
+        "type": "csv",
+        "z": "c8c78f4d.679e8",
+        "name": "",
+        "sep": ",",
+        "hdrin": true,
+        "hdrout": "",
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "include_empty_strings": false,
+        "include_null_values": false,
+        "x": 200,
+        "y": 80,
+        "wires": [
+            [
+                "d12b5d18.58218"
+            ]
+        ]
+    },
+    {
+        "id": "3b501c89.fa554c",
+        "type": "split",
+        "z": "c8c78f4d.679e8",
+        "name": "",
+        "splt": "\\n",
+        "spltType": "str",
+        "arraySplt": 1,
+        "arraySpltType": "len",
+        "stream": false,
+        "addname": "topic",
+        "x": 540,
+        "y": 80,
+        "wires": [
+            [
+                "6dad6ed9.c91f08"
+            ]
+        ]
+    },
+    {
+        "id": "6dad6ed9.c91f08",
+        "type": "function",
+        "z": "c8c78f4d.679e8",
+        "name": "",
+        "func": "if (!context.results) context.results = {}\n\nif (!context.results[msg.topic]) context.results[msg.topic] = []\ncontext.results[msg.topic].push(msg.payload)\nmsg.payload = context.results\n\nif ((msg.originalParts.index === msg.originalParts.count - 1) && (msg.parts.index === msg.parts.count - 1)) {\n    msg.payload = context.results\n    context.results = {}\n    return msg\n}\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 660,
+        "y": 80,
+        "wires": [
+            [
+                "d71e0bef.46647"
+            ]
+        ]
+    },
+    {
+        "id": "d12b5d18.58218",
+        "type": "change",
+        "z": "c8c78f4d.679e8",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "originalParts",
+                "pt": "msg",
+                "to": "parts",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 370,
+        "y": 80,
+        "wires": [
+            [
+                "3b501c89.fa554c"
+            ]
+        ]
+    },
+    {
+        "id": "d71e0bef.46647",
+        "type": "change",
+        "z": "c8c78f4d.679e8",
+        "name": "spread",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$spread(payload)",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 780,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "699adb8d36de0549",
+        "type": "debug",
+        "z": "fd967d3c7c7fe0f8",
+        "name": "Authorization responce",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 960,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "234abb0591744f32",
+        "type": "http request",
+        "z": "fd967d3c7c7fe0f8",
+        "name": "Send authorization request",
+        "method": "GET",
+        "ret": "txt",
+        "paytoqs": "query",
+        "url": "${AUTHORIZATION_URL}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 560,
+        "y": 260,
+        "wires": [
+            [
+                "699adb8d36de0549",
+                "4798d1ae4c3fa98a"
+            ]
+        ]
+    },
+    {
+        "id": "4798d1ae4c3fa98a",
+        "type": "function",
+        "z": "fd967d3c7c7fe0f8",
+        "name": "Open browser",
+        "func": "await open(msg.responseUrl);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "open",
+                "module": "open"
+            }
+        ],
+        "x": 900,
+        "y": 260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b3de04ee85d8da73",
+        "type": "debug",
+        "z": "7b38a77803fd0ba6",
+        "name": "refresh response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 890,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "b8df90837ff01076",
+        "type": "function",
+        "z": "7b38a77803fd0ba6",
+        "name": "Create oauth request",
+        "func": "const refreshToken = global.get('refresh_token');\nconst appId = env.get('APP_ID')\n\nreturn {\n    payload: {\n            \"grant_type\": \"refresh_token\",\n            \"client_id\": appId,\n            \"scope\": \"offline_access profile openid email\",\n            \"refresh_token\": refreshToken\n    },\n    headers: {\n        \"content-type\": \"application/x-www-form-urlencoded\"\n    }\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 400,
+        "y": 180,
+        "wires": [
+            [
+                "12029d6d24a36f58"
+            ]
+        ]
+    },
+    {
+        "id": "12029d6d24a36f58",
+        "type": "http request",
+        "z": "7b38a77803fd0ba6",
+        "name": "",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "${TOKEN_URL}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 610,
+        "y": 180,
+        "wires": [
+            [
+                "cebe8791f9b57c11",
+                "b3de04ee85d8da73"
+            ]
+        ]
+    },
+    {
+        "id": "cebe8791f9b57c11",
+        "type": "change",
+        "z": "7b38a77803fd0ba6",
+        "name": "Save tokens",
+        "rules": [
+            {
+                "t": "set",
+                "p": "access_token",
+                "pt": "global",
+                "to": "payload.access_token",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "refresh_token",
+                "pt": "global",
+                "to": "payload.refresh_token",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "id_token",
+                "pt": "global",
+                "to": "payload.id_token",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 850,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "4b058234381d2da0",
+        "type": "http in",
+        "z": "fd967d3c7c7fe0f8",
+        "name": "Receive code",
+        "url": "/redirect",
+        "method": "get",
+        "upload": false,
+        "swaggerDoc": "",
+        "x": 150,
+        "y": 600,
+        "wires": [
+            [
+                "8db57466642fcf0b",
+                "febd46be175c4169",
+                "d475202c42772704"
+            ]
+        ]
+    },
+    {
+        "id": "8db57466642fcf0b",
+        "type": "http response",
+        "z": "fd967d3c7c7fe0f8",
+        "name": "Send successful response",
+        "statusCode": "200",
+        "headers": {},
+        "x": 410,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "9f60036fdd6f0b29",
+        "type": "http request",
+        "z": "fd967d3c7c7fe0f8",
+        "name": "Request token",
+        "method": "POST",
+        "ret": "obj",
+        "paytoqs": "ignore",
+        "url": "${TOKEN_URL}",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 840,
+        "y": 580,
+        "wires": [
+            [
+                "74237853ef65a984"
+            ]
+        ]
+    },
+    {
+        "id": "25c0a144589b511e",
+        "type": "debug",
+        "z": "fd967d3c7c7fe0f8",
+        "name": "Token",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 670,
+        "y": 720,
+        "wires": []
+    },
+    {
+        "id": "74237853ef65a984",
+        "type": "debug",
+        "z": "fd967d3c7c7fe0f8",
+        "name": "Auth code response",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1200,
+        "y": 680,
+        "wires": []
+    },
+    {
+        "id": "8ecc77dde5421f43",
+        "type": "change",
+        "z": "fd967d3c7c7fe0f8",
+        "name": "build request",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload.grant_type",
+                "pt": "msg",
+                "to": "authorization_code",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.code",
+                "pt": "msg",
+                "to": "payload.code",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload.redirect_uri",
+                "pt": "msg",
+                "to": "http://localhost:1880/redirect",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.client_id",
+                "pt": "msg",
+                "to": "APP_ID",
+                "tot": "env"
+            },
+            {
+                "t": "delete",
+                "p": "payload.session_state",
+                "pt": "msg"
+            },
+            {
+                "t": "set",
+                "p": "headers[\"content-type\"]",
+                "pt": "msg",
+                "to": "application/x-www-form-urlencoded",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.scope",
+                "pt": "msg",
+                "to": "offline_access profile openid email",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 630,
+        "y": 580,
+        "wires": [
+            [
+                "9f60036fdd6f0b29"
+            ]
+        ]
+    },
+    {
+        "id": "febd46be175c4169",
+        "type": "debug",
+        "z": "fd967d3c7c7fe0f8",
+        "name": "Authorization request",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 420,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "d475202c42772704",
+        "type": "switch",
+        "z": "fd967d3c7c7fe0f8",
+        "name": "is successfull",
+        "property": "payload.code",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "nnull"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 410,
+        "y": 600,
+        "wires": [
+            [
+                "8ecc77dde5421f43"
+            ],
+            [
+                "25c0a144589b511e"
+            ]
+        ]
+    },
+    {
+        "id": "9da4a7b772e85d33",
+        "type": "change",
+        "z": "fd967d3c7c7fe0f8",
+        "name": "Build request",
+        "rules": [
+            {
+                "t": "delete",
+                "p": "payload",
+                "pt": "msg"
+            },
+            {
+                "t": "set",
+                "p": "payload.response_type",
+                "pt": "msg",
+                "to": "code",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.client_id",
+                "pt": "msg",
+                "to": "APP_ID",
+                "tot": "env"
+            },
+            {
+                "t": "set",
+                "p": "payload.redirect_uri",
+                "pt": "msg",
+                "to": "http://localhost:1880/redirect",
+                "tot": "str"
+            },
+            {
+                "t": "set",
+                "p": "payload.scope",
+                "pt": "msg",
+                "to": "api://482a02c0-4f23-4662-8e4c-c6e16b89a7cd/Metrics.Write",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 290,
+        "y": 260,
+        "wires": [
+            [
+                "234abb0591744f32"
+            ]
+        ]
+    },
+    {
+        "id": "e278782a471617a8",
+        "type": "debug",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "statusCode",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1920,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "29a90a18a3230d34",
+        "type": "exec",
+        "z": "9dd6b84e939a9a5d",
+        "command": "powercfg /srumutil",
+        "addpay": "",
+        "append": "",
+        "useSpawn": "false",
+        "timer": "",
+        "winHide": true,
+        "oldrc": false,
+        "name": "powercfg /srumutil",
+        "x": 430,
+        "y": 120,
+        "wires": [
+            [],
+            [],
+            [
+                "0e32b1c61b2f2242"
+            ]
+        ]
+    },
+    {
+        "id": "0e32b1c61b2f2242",
+        "type": "switch",
+        "z": "9dd6b84e939a9a5d",
+        "name": "",
+        "property": "payload.code",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 630,
+        "y": 120,
+        "wires": [
+            [
+                "da00b98a8c22123a"
+            ],
+            [
+                "ede413959838f454"
+            ]
+        ]
+    },
+    {
+        "id": "ede413959838f454",
+        "type": "debug",
+        "z": "9dd6b84e939a9a5d",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 870,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "994d335ae3e82012",
+        "type": "function",
+        "z": "9dd6b84e939a9a5d",
+        "name": "Get last uploaded row timestamp",
+        "func": "let lastUploadedRowDate = flow.get('lastUploadedRowDate');\n\n// Default to -1min if no recent lastUploadedRowDate\nif (!lastUploadedRowDate) {\n    const now = new Date();\n    now.setMilliseconds(0)\n    now.setMinutes(now.getMinutes() - 1);\n    lastUploadedRowDate = now;\n}\n\nreturn {\n    ...msg,\n    lastUploadedRowDate,\n};",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1120,
+        "y": 180,
+        "wires": [
+            [
+                "d63d8d431c266876"
+            ]
+        ]
+    },
+    {
+        "id": "d63d8d431c266876",
+        "type": "function",
+        "z": "9dd6b84e939a9a5d",
+        "name": "Filter out uploaded rows by timestamp",
+        "func": "//For srumutuil timestamp of format: 2021-09-22:06:47:00.0000\nconst srumutilDateRegex = /(\\d{4})-(\\d{2})-(\\d{2}):(\\d{2}):(\\d{2}):(\\d{2}.\\d{4})/;\n\nconst parseSrumutilTimeStamp = (timeStamp) => {\n    const dateArray = srumutilDateRegex.exec(timeStamp);\n    \n    // Param values: new Date(Date.UTC(year, monthIndex, day, hours, minutes, seconds, milliseconds))\n    var parsedDate = new Date(Date.UTC(\n        (+dateArray[1]),\n        (+dateArray[2])-1, // Month is an index so it start at the 0\n        (+dateArray[3]),\n        (+dateArray[4]),\n        (+dateArray[5]),\n        (+dateArray[6])\n    ));\n    return parsedDate;\n}\n\nconst lastUploadedRowDate = new Date(msg.lastUploadedRowDate);\n\nconst firstNewRowIndex = msg.payload.findIndex((row) => {\n    const rowDate = parseSrumutilTimeStamp(row.TimeStamp);\n    return rowDate > lastUploadedRowDate;\n})\n\nconst rowsSinceLastUplaod = msg.payload.slice(firstNewRowIndex);\nconst lastRowTimeStamp = rowsSinceLastUplaod[rowsSinceLastUplaod.length-1].TimeStamp.trim();\n\nreturn {\n    ...msg,\n    payload: rowsSinceLastUplaod,\n    lastUploadedRowDate: parseSrumutilTimeStamp(lastRowTimeStamp),\n};",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1450,
+        "y": 180,
+        "wires": [
+            [
+                "67ba4c141dda7709"
+            ]
+        ]
+    },
+    {
+        "id": "4bca0f03a83c1d27",
+        "type": "function",
+        "z": "9dd6b84e939a9a5d",
+        "name": "Set request URL and headers",
+        "func": "\nreturn {\n    url: `${env.get('API_URL')}/process?hostname=loik`,\n    headers: {\n        Authorization: `Bearer ${global.get('access_token')}`,\n        Accept: \"application/json\"\n    },\n    payload: msg.payload\n};",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1750,
+        "y": 380,
+        "wires": [
+            [
+                "b20ea34df9042095"
+            ]
+        ]
+    },
+    {
+        "id": "a60e1e18dfe24404",
+        "type": "change",
+        "z": "9dd6b84e939a9a5d",
+        "name": "tmp save timestamp",
+        "rules": [
+            {
+                "t": "set",
+                "p": "tmpTimestamp",
+                "pt": "flow",
+                "to": "lastUploadedRowDate",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1900,
+        "y": 280,
+        "wires": [
+            [
+                "4bca0f03a83c1d27"
+            ]
+        ]
+    },
+    {
+        "id": "b20ea34df9042095",
+        "type": "subflow:98593475dbf2438d",
+        "z": "9dd6b84e939a9a5d",
+        "name": "",
+        "env": [],
+        "x": 2060,
+        "y": 380,
+        "wires": [
+            [
+                "6697b9dfa427a791",
+                "23404d57ae3e0c41"
+            ],
+            [
+                "cd50ab290790245a"
+            ]
+        ]
+    },
+    {
+        "id": "0a01863cab2ae907",
+        "type": "switch",
+        "z": "98593475dbf2438d",
+        "name": "has access_token",
+        "property": "access_token",
+        "propertyType": "global",
+        "rules": [
+            {
+                "t": "nnull"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 250,
+        "y": 220,
+        "wires": [
+            [
+                "ccbe4a72b4c2fd18"
+            ],
+            [
+                "a250f2992da08e40"
+            ]
+        ]
+    },
+    {
+        "id": "a250f2992da08e40",
+        "type": "subflow:fd967d3c7c7fe0f8",
+        "z": "98593475dbf2438d",
+        "name": "",
+        "env": [],
+        "x": 470,
+        "y": 320,
+        "wires": [
+            [
+                "e80f3fbe2325ee96"
+            ]
+        ]
+    },
+    {
+        "id": "e80f3fbe2325ee96",
+        "type": "change",
+        "z": "98593475dbf2438d",
+        "name": "Save tokens",
+        "rules": [
+            {
+                "t": "set",
+                "p": "access_token",
+                "pt": "global",
+                "to": "payload.access_token",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "refresh_token",
+                "pt": "global",
+                "to": "payload.refresh_token",
+                "tot": "msg"
+            },
+            {
+                "t": "set",
+                "p": "id_token",
+                "pt": "global",
+                "to": "payload.id_token",
+                "tot": "msg"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 670,
+        "y": 320,
+        "wires": [
+            [
+                "ccbe4a72b4c2fd18"
+            ]
+        ]
+    },
+    {
+        "id": "ccbe4a72b4c2fd18",
+        "type": "http request",
+        "z": "98593475dbf2438d",
+        "name": "Post to API",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "authType": "",
+        "x": 870,
+        "y": 200,
+        "wires": [
+            [
+                "29fd4e25d8792fd4"
+            ]
+        ]
+    },
+    {
+        "id": "29fd4e25d8792fd4",
+        "type": "switch",
+        "z": "98593475dbf2438d",
+        "name": "",
+        "property": "statusCode",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "401",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "204",
+                "vt": "num"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 1030,
+        "y": 220,
+        "wires": [
+            [
+                "a99cdebc3af485ac"
+            ],
+            [],
+            []
+        ]
+    },
+    {
+        "id": "a99cdebc3af485ac",
+        "type": "subflow:7b38a77803fd0ba6",
+        "z": "98593475dbf2438d",
+        "name": "",
+        "env": [],
+        "x": 1220,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "6697b9dfa427a791",
+        "type": "change",
+        "z": "9dd6b84e939a9a5d",
+        "name": "save last uploaded row timestamp",
+        "rules": [
+            {
+                "t": "set",
+                "p": "lastUploadedRowDate",
+                "pt": "flow",
+                "to": "tmpTimestamp",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 2380,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cd50ab290790245a",
+        "type": "debug",
+        "z": "9dd6b84e939a9a5d",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2290,
+        "y": 400,
+        "wires": []
+    },
+    {
+        "id": "23404d57ae3e0c41",
+        "type": "debug",
+        "z": "9dd6b84e939a9a5d",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "statusCode",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2320,
+        "y": 320,
+        "wires": []
+    },
+    {
+        "id": "9eef6cbe1d97cc91",
+        "type": "subflow:98593475dbf2438d",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "x": 1680,
+        "y": 480,
+        "wires": [
+            [
+                "e278782a471617a8",
+                "637846617abd8fa2"
+            ],
+            [
+                "57bd8eca66d09ac4"
+            ]
+        ]
+    },
+    {
+        "id": "637846617abd8fa2",
+        "type": "change",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "length",
+                "tot": "flow"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 1960,
+        "y": 460,
+        "wires": [
+            [
+                "d59f5e99ae741825"
+            ]
+        ]
+    },
+    {
+        "id": "d59f5e99ae741825",
+        "type": "file",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "filename": ".count",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "true",
+        "encoding": "none",
+        "x": 2190,
+        "y": 460,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "57bd8eca66d09ac4",
+        "type": "debug",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": true,
+        "tostatus": true,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "payload",
+        "statusType": "auto",
+        "x": 1950,
+        "y": 520,
+        "wires": []
+    }
+]

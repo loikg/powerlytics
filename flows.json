@@ -174,20 +174,6 @@
         ]
     },
     {
-        "id": "9987d621ed81fc30",
-        "type": "influxdb",
-        "hostname": "127.0.0.1",
-        "port": "8086",
-        "protocol": "http",
-        "database": "mydb",
-        "name": "carbon_analytics",
-        "usetls": false,
-        "tls": "",
-        "influxdbVersion": "1.x",
-        "url": "http://localhost:8086",
-        "rejectUnauthorized": true
-    },
-    {
         "id": "bd7a895cbe4aa276",
         "type": "function",
         "z": "918a6a197ce3a466",
@@ -228,7 +214,8 @@
         "wires": [
             [
                 "c63f9b377b939e59",
-                "c823079cd2087bee"
+                "c823079cd2087bee",
+                "639445281ccde074"
             ]
         ]
     },
@@ -1605,6 +1592,23 @@
         "statusType": "auto",
         "x": 1950,
         "y": 520,
+        "wires": []
+    },
+    {
+        "id": "639445281ccde074",
+        "type": "debug",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "$env('API_URL') & '/write?hostname=' & payload.mac_id\t",
+        "targetType": "jsonata",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 120,
+        "y": 100,
         "wires": []
     }
 ]

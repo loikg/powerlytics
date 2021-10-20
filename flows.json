@@ -484,8 +484,8 @@
         "reduceInit": "",
         "reduceInitType": "",
         "reduceFixup": "",
-        "x": 1110,
-        "y": 640,
+        "x": 1090,
+        "y": 620,
         "wires": [
             [
                 "390adaaabead681c"
@@ -525,11 +525,11 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1380,
-        "y": 500,
+        "x": 1240,
+        "y": 480,
         "wires": [
             [
-                "9eef6cbe1d97cc91"
+                "337896f1d5b6cf0c"
             ]
         ]
     },
@@ -1707,6 +1707,33 @@
         "wires": [
             [
                 "29a90a18a3230d34"
+            ]
+        ]
+    },
+    {
+        "id": "337896f1d5b6cf0c",
+        "type": "switch",
+        "z": "918a6a197ce3a466",
+        "name": "Is payload empty",
+        "property": "$count(payload) <= 0\t",
+        "propertyType": "jsonata",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1450,
+        "y": 460,
+        "wires": [
+            [],
+            [
+                "9eef6cbe1d97cc91"
             ]
         ]
     }

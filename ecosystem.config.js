@@ -19,6 +19,11 @@ module.exports = {
     },
     env_production: {
       NODE_ENV: "production",
+      NODE_TLS_REJECT_UNAUTHORIZED: 0,
+      API_URL: "{{PROD_API_URL}}",
+      APP_ID: "{{PROD_APP_ID}}",
+      TOKEN_URL: "{{PROD_TOKEN_URL}}",
+      AUTHORIZATION_URL: "{PROD_AUTHORIZATION_URL}}"
     }
   }]
 }

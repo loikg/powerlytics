@@ -206,7 +206,7 @@
         "props": [],
         "repeat": "120",
         "crontab": "",
-        "once": false,
+        "once": true,
         "onceDelay": 0.1,
         "topic": "",
         "x": 90,

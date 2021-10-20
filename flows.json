@@ -214,8 +214,7 @@
         "wires": [
             [
                 "c63f9b377b939e59",
-                "c823079cd2087bee",
-                "639445281ccde074"
+                "c823079cd2087bee"
             ]
         ]
     },
@@ -480,7 +479,7 @@
                 "t": "set",
                 "p": "headers.Authorization",
                 "pt": "msg",
-                "to": "\"Bearer \" & $globalContext(\"access_token\")\t",
+                "to": "\"Bearer \" & $globalContext(\"access_token\", \"file\")\t",
                 "tot": "jsonata"
             }
         ],
@@ -838,21 +837,21 @@
         "rules": [
             {
                 "t": "set",
-                "p": "access_token",
+                "p": "#:(file)::access_token",
                 "pt": "global",
                 "to": "payload.access_token",
                 "tot": "msg"
             },
             {
                 "t": "set",
-                "p": "refresh_token",
+                "p": "#:(file)::refresh_token",
                 "pt": "global",
                 "to": "payload.refresh_token",
                 "tot": "msg"
             },
             {
                 "t": "set",
-                "p": "id_token",
+                "p": "#:(file)::id_token",
                 "pt": "global",
                 "to": "payload.id_token",
                 "tot": "msg"
@@ -1249,7 +1248,7 @@
         "type": "function",
         "z": "9dd6b84e939a9a5d",
         "name": "Set request URL and headers",
-        "func": "\nreturn {\n    url: `${env.get('API_URL')}/process?hostname=loik`,\n    headers: {\n        Authorization: `Bearer ${global.get('access_token')}`,\n        Accept: \"application/json\"\n    },\n    payload: msg.payload\n};",
+        "func": "\nreturn {\n    url: `${env.get('API_URL')}/process?hostname=loik`,\n    headers: {\n        Authorization: `Bearer ${global.get('access_token', 'file')}`,\n        Accept: \"application/json\"\n    },\n    payload: msg.payload\n};",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1313,7 +1312,7 @@
         "type": "switch",
         "z": "98593475dbf2438d",
         "name": "has access_token",
-        "property": "access_token",
+        "property": "#:(file)::access_token",
         "propertyType": "global",
         "rules": [
             {
@@ -1359,21 +1358,21 @@
         "rules": [
             {
                 "t": "set",
-                "p": "access_token",
+                "p": "#:(file)::access_token",
                 "pt": "global",
                 "to": "payload.access_token",
                 "tot": "msg"
             },
             {
                 "t": "set",
-                "p": "refresh_token",
+                "p": "#:(file)::refresh_token",
                 "pt": "global",
                 "to": "payload.refresh_token",
                 "tot": "msg"
             },
             {
                 "t": "set",
-                "p": "id_token",
+                "p": "#:(file)::id_token",
                 "pt": "global",
                 "to": "payload.id_token",
                 "tot": "msg"
@@ -1592,23 +1591,6 @@
         "statusType": "auto",
         "x": 1950,
         "y": 520,
-        "wires": []
-    },
-    {
-        "id": "639445281ccde074",
-        "type": "debug",
-        "z": "918a6a197ce3a466",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "$env('API_URL') & '/write?hostname=' & payload.mac_id\t",
-        "targetType": "jsonata",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 120,
-        "y": 100,
         "wires": []
     }
 ]

@@ -2,13 +2,15 @@
 
 ## node-red flow development
 
+Open `ecosystem.config.js` and change the value of `API_URL`, `APP_ID`, `TOKEN_URL`, `AUTHORIZATION_URL`.
+
 ```
-npm install
+npm i
 
 npm start
 ```
 
-Open localhost:1880
+Node-red will be running at http://localhost:1880
 
 ## Create .exe installer
 

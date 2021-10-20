@@ -1,0 +1,23 @@
+{
+  "name": "powerlytics",
+  "version": "1.0.0",
+  "description": "powerlytics",
+  "main": "index.js",
+  "scripts": {
+    "start": "node-red"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/loikg/powerlytics.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/loikg/powerlytics/issues"
+  },
+  "homepage": "https://github.com/loikg/powerlytics#readme",
+  "dependencies": {
+    "node-red": "^2.0.6"
+  }
+}

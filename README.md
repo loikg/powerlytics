@@ -1,5 +1,15 @@
 # powerlytics
 
+## node-red flow development
+
+```
+npm install
+
+npm start
+```
+
+Open localhost:1880
+
 ## Create .exe installer
 
 <b> NOTE: requires python >= 3.7 </b>

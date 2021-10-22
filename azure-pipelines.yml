@@ -15,4 +15,20 @@ steps:
     versionSpec: '3.x'
     addToPath: true
     architecture: 'x64'
-
+- task: CmdLine@2
+  inputs:
+    script: |
+      sed -i -e 's/{{PROD_API_URL}}/$(API_URL)/g' installer.py
+      sed -i -e 's/{{PROD_APP_ID}}/$(APP_ID)/g' installer.py
+      sed -i -e 's/{{PROD_TOKEN_URL}}/$(TOKEN_URL)/g' installer.py
+      sed -i -e 's/{{PROD_AUTHORIZATION_URL}}/$(AUTHORIZATION_URL)/g' installer.py
+      cat installer.py
+- task: CmdLine@2
+  inputs:
+    script: 'pip install pyinstaller'
+- task: CmdLine@2
+  inputs:
+    script: |
+      pyinstaller --onefile --windowed installer.py
+      pyinstaller --onefile --windowed start.py
+      pyinstaller --onefile --windowed stop.py

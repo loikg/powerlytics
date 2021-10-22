@@ -32,3 +32,8 @@ steps:
       pyinstaller --onefile --windowed installer.py
       pyinstaller --onefile --windowed start.py
       pyinstaller --onefile --windowed stop.py
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/dist'
+    ArtifactName: 'bin'
+    publishLocation: 'Container'

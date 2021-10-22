@@ -15,13 +15,17 @@ steps:
     versionSpec: '3.8'
     addToPath: true
     architecture: 'x86'
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      (Get-Content installer.py).replace('{{PROD_API_URL}}', ${env:API_URL}) | Set-Content installer.py
+      (Get-Content installer.py).replace('{{PROD_APP_ID}}', ${env:APP_ID}) | Set-Content installer.py
+      (Get-Content installer.py).replace('{{PROD_TOKEN_URL}}', ${env:TOKEN_URL}) | Set-Content installer.py
+      (Get-Content installer.py).replace('{{PROD_AUTHORIZATION_URL}}', ${env:AUTHORIZATION_URL}) | Set-Content installer.py
 - task: CmdLine@2
   inputs:
     script: |
-      sed -i -e 's/{{PROD_API_URL}}/%API_URL%/g' installer.py
-      sed -i -e 's/{{PROD_APP_ID}}/%APP_ID%/g' installer.py
-      sed -i -e 's/{{PROD_TOKEN_URL}}/%TOKEN_URL%/g' installer.py
-      sed -i -e 's/{{PROD_AUTHORIZATION_URL}}/%AUTHORIZATION_URL%/g' installer.py
       cat installer.py
 - task: CmdLine@2
   inputs:
@@ -32,6 +36,7 @@ steps:
       pyinstaller --onefile --windowed installer.py
       pyinstaller --onefile --windowed start.py
       pyinstaller --onefile --windowed stop.py
+      dir
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)/dist'

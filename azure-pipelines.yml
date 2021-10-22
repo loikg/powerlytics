@@ -18,10 +18,10 @@ steps:
 - task: CmdLine@2
   inputs:
     script: |
-      sed -i -e 's/{{PROD_API_URL}}/$(API_URL)/g' installer.py
-      sed -i -e 's/{{PROD_APP_ID}}/$(APP_ID)/g' installer.py
-      sed -i -e 's/{{PROD_TOKEN_URL}}/$(TOKEN_URL)/g' installer.py
-      sed -i -e 's/{{PROD_AUTHORIZATION_URL}}/$(AUTHORIZATION_URL)/g' installer.py
+      sed -i -e 's/{{PROD_API_URL}}/%API_URL%/g' installer.py
+      sed -i -e 's/{{PROD_APP_ID}}/%APP_ID%/g' installer.py
+      sed -i -e 's/{{PROD_TOKEN_URL}}/%TOKEN_URL%/g' installer.py
+      sed -i -e 's/{{PROD_AUTHORIZATION_URL}}/%AUTHORIZATION_URL%/g' installer.py
       cat installer.py
 - task: CmdLine@2
   inputs:

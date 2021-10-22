@@ -16,10 +16,10 @@ module.exports = {
     env: {
       NODE_ENV: "development",
       NODE_TLS_REJECT_UNAUTHORIZED: 0,
-      API_URL: "https://f25a7443-be65-4cd1-a3ea-2b6431a9e63c.cloudapp.net/metrics",
-      APP_ID: "cf2396bd-0875-40df-8244-15d2fa92a940",
-      TOKEN_URL: "https://login.microsoftonline.com/9dae36f4-0de6-4a4e-a718-3dc11e509f38/oauth2/v2.0/token",
-      AUTHORIZATION_URL: "https://login.microsoftonline.com/9dae36f4-0de6-4a4e-a718-3dc11e509f38/oauth2/v2.0/authorize"
+      API_URL: "{{PROD_API_URL}}",
+      APP_ID: "{{PROD_APP_ID}}",
+      TOKEN_URL: "{{PROD_TOKEN_URL}}",
+      AUTHORIZATION_URL: "{{PROD_AUTHORIZATION_URL}}"
     },
     env_test: {
       NODE_ENV: "test",

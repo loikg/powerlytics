@@ -17,6 +17,11 @@ steps:
     architecture: 'x86'
 - task: PowerShell@2
   name: InsertSecrets
+  env:
+    API_URL: $(API_URL)
+    APP_ID: $(APP_ID)
+    TOKEN_URL: $(TOKEN_URL)
+    AUTHORIZATION_URL: $(AUTHORIZATION_URL)
   inputs:
     targetType: 'inline'
     script: |

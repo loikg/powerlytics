@@ -77,7 +77,9 @@ with open(path.join(project_dir, 'NLog.config'), 'wb') as f:
 with open(path.join(project_dir, '.count'), 'w') as f:
   pass
 
-system('ohmgraphite.exe install')
+ohmExe = path.join(project_dir, 'ohmgraphite.exe')
+
+system(f'{ohmExe} install')
 
 print('All services started successfully!')
 

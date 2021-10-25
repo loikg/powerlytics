@@ -37,7 +37,6 @@ steps:
       pyinstaller --distpath $(Build.ArtifactStagingDirectory)\dist --onefile --windowed installer.py
       pyinstaller --distpath $(Build.ArtifactStagingDirectory)\dist --onefile --windowed start.py
       pyinstaller --distpath $(Build.ArtifactStagingDirectory)\dist --onefile --windowed stop.py
-      dir dist
 - task: PublishBuildArtifacts@1
   name: PublishArtifacts
   inputs:

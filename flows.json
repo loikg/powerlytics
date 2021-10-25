@@ -246,6 +246,7 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
+        "payloadType": "str",
         "x": 90,
         "y": 240,
         "wires": [
@@ -486,47 +487,6 @@
         "reduceFixup": "",
         "x": 1090,
         "y": 620,
-        "wires": [
-            [
-                "390adaaabead681c"
-            ]
-        ]
-    },
-    {
-        "id": "390adaaabead681c",
-        "type": "change",
-        "z": "918a6a197ce3a466",
-        "name": "",
-        "rules": [
-            {
-                "t": "set",
-                "p": "url",
-                "pt": "msg",
-                "to": "$env('API_URL') & '/write?hostname=' &  $globalContext(\"mac_address\")",
-                "tot": "jsonata"
-            },
-            {
-                "t": "set",
-                "p": "payload",
-                "pt": "msg",
-                "to": "payload.data",
-                "tot": "msg"
-            },
-            {
-                "t": "set",
-                "p": "headers.Authorization",
-                "pt": "msg",
-                "to": "\"Bearer \" & $globalContext(\"access_token\", \"file\")\t",
-                "tot": "jsonata"
-            }
-        ],
-        "action": "",
-        "property": "",
-        "from": "",
-        "to": "",
-        "reg": false,
-        "x": 1240,
-        "y": 480,
         "wires": [
             [
                 "337896f1d5b6cf0c"
@@ -1286,7 +1246,7 @@
         "type": "function",
         "z": "9dd6b84e939a9a5d",
         "name": "Set request URL and headers",
-        "func": "\nreturn {\n    url: `${env.get('API_URL')}/process?hostname=${global.get('mac_address')}`,\n    headers: {\n        Authorization: `Bearer ${global.get('access_token', 'file')}`,\n        Accept: \"application/json\"\n    },\n    payload: msg.payload\n};",
+        "func": "let payload = '--------------------------d74496d66958873e\\r\\n'+\n'Content-Disposition: form-data; name=\"file\"; filename=\"data.json\"\\r\\n'+\n'Content-Type: application/octet-stream\\r\\n'+\n'\\r\\n'+\nJSON.stringify(msg.payload)+'\\r\\n'+\n'--------------------------d74496d66958873e--\\r\\n';\n\nreturn {\n    url: `${env.get('API_URL')}/process?hostname=${global.get('mac_address')}`,\n    headers: {\n        Authorization: `Bearer ${global.get('access_token', 'file')}`,\n        Accept: \"application/json\",\n        \"Content-Type\": \"multipart/form-data; boundary=------------------------d74496d66958873e\"\n    },\n    payload\n};",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1296,8 +1256,7 @@
         "y": 380,
         "wires": [
             [
-                "b20ea34df9042095",
-                "9b30b571eb8317a7"
+                "b20ea34df9042095"
             ]
         ]
     },
@@ -1716,7 +1675,7 @@
         "type": "switch",
         "z": "918a6a197ce3a466",
         "name": "Is payload empty",
-        "property": "$count(payload) <= 0\t",
+        "property": "$count(payload.data) <= 0\t",
         "propertyType": "jsonata",
         "rules": [
             {
@@ -1729,30 +1688,32 @@
         "checkall": "true",
         "repair": false,
         "outputs": 2,
-        "x": 1450,
-        "y": 460,
+        "x": 1250,
+        "y": 420,
         "wires": [
             [],
             [
-                "9eef6cbe1d97cc91"
+                "57cae997cd7a06de"
             ]
         ]
     },
     {
-        "id": "9b30b571eb8317a7",
-        "type": "debug",
-        "z": "9dd6b84e939a9a5d",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "payload",
-        "targetType": "msg",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 2110,
-        "y": 120,
-        "wires": []
+        "id": "57cae997cd7a06de",
+        "type": "function",
+        "z": "918a6a197ce3a466",
+        "name": "Set request URL and headers",
+        "func": "let payload = '--------------------------d74496d66958873e\\r\\n'+\n'Content-Disposition: form-data; name=\"file\"; filename=\"data.json\"\\r\\n'+\n'Content-Type: application/octet-stream\\r\\n'+\n'\\r\\n'+\nJSON.stringify(msg.payload.data)+'\\r\\n'+\n'--------------------------d74496d66958873e--\\r\\n';\n\n\nreturn {\n    url: `${env.get('API_URL')}/write?hostname=${global.get('mac_address')}`,\n    headers: {\n        Authorization: `Bearer ${global.get('access_token', 'file')}`,\n        Accept: \"application/json\",\n         \"Content-Type\": \"multipart/form-data; boundary=------------------------d74496d66958873e\"\n    },\n    payload\n};",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1530,
+        "y": 380,
+        "wires": [
+            [
+                "9eef6cbe1d97cc91"
+            ]
+        ]
     }
 ]

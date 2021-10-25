@@ -16,6 +16,7 @@ steps:
     addToPath: true
     architecture: 'x86'
 - task: PowerShell@2
+  name: InsertSecrets
   inputs:
     targetType: 'inline'
     script: |
@@ -36,7 +37,7 @@ steps:
       pyinstaller --onefile --windowed installer.py
       pyinstaller --onefile --windowed start.py
       pyinstaller --onefile --windowed stop.py
-      dir
+      dir dist
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)/dist'

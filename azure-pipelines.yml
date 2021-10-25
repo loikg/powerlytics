@@ -34,12 +34,13 @@ steps:
 - task: CmdLine@2
   inputs:
     script: |
-      pyinstaller --distpath $(Build.ArtifactStagingDirectory) --onefile --windowed installer.py
-      pyinstaller --distpath $(Build.ArtifactStagingDirectory) --onefile --windowed start.py
-      pyinstaller --distpath $(Build.ArtifactStagingDirectory) --onefile --windowed stop.py
+      pyinstaller --distpath $(Build.ArtifactStagingDirectory)\dist --onefile --windowed installer.py
+      pyinstaller --distpath $(Build.ArtifactStagingDirectory)\dist --onefile --windowed start.py
+      pyinstaller --distpath $(Build.ArtifactStagingDirectory)\dist --onefile --windowed stop.py
       dir dist
 - task: PublishBuildArtifacts@1
+  name: PublishArtifacts
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)\dist'
     ArtifactName: 'bin'
     publishLocation: 'Container'

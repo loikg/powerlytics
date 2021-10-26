@@ -15,20 +15,9 @@ steps:
     versionSpec: '3.8'
     addToPath: true
     architecture: 'x64'
-# - task: PowerShell@2
-#   name: InstallPyInstaller
-#   # This will clone and manually build the pyinstaller to avoid exe being flagged by windows defender
-#   inputs:
-#     targetType: 'inline'
-#     script: |
-#       pip install wheel
-#       git clone https://github.com/pyinstaller/pyinstaller.git --branch v4.5.1 --single-branch
-#       cd pyinstaller
-#       python.exe ./waf all --target-arch=64bit
-#       python.exe setup.py install
 - task: CmdLine@2
   name: InstallPyInstaller
-  # This will clone and manually build the pyinstaller to avoid exe being flagged by windows defender
+  # This will clone and manually build the pyinstaller bootloader to avoid exe being flagged by windows defender
   inputs:
     script: |
       pip install wheel

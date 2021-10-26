@@ -15,15 +15,17 @@ steps:
     versionSpec: '3.8'
     addToPath: true
     architecture: 'x64'
+
 - task: CmdLine@2
   name: InstallPyInstaller
   # This will clone and manually build the pyinstaller to avoid exe being flagged by windows defender
   inputs:
     script: |
       pip install wheel
-      git clone https://github.com/pyinstaller/pyinstaller
+      Invoke-WebRequest "https://github.com/pyinstaller/pyinstaller/archive/refs/tags/v4.5.1.zip" -OutFile "pyinstaller.zip"
+      Expand-Archive .\pyinstaller.zip -DestinationPath .\
       
-      cd pyinstaller 
+      cd pyinstaller-4.5.1 
       
       python.exe ./waf all --target-arch=64bit
       

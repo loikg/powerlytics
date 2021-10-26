@@ -16,6 +16,8 @@ steps:
     addToPath: true
     architecture: 'x64'
 - task: CmdLine@2
+  name: InstallPyInstaller
+  # This will clone and manually build the pyinstaller to avoid exe being flagged by windows defender
   inputs:
     script: |
       pip install wheel

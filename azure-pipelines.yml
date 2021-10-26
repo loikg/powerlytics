@@ -18,9 +18,10 @@ steps:
 - task: CmdLine@2
   inputs:
     script: |
+      pip install wheel
       git clone https://github.com/pyinstaller/pyinstaller
       
-      cd pyinstaller
+      cd pyinstaller 
       
       python.exe ./waf all --target-arch=64bit
       

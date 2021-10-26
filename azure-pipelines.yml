@@ -40,10 +40,10 @@ steps:
       (Get-Content installer.py).replace('{{PROD_APP_ID}}', ${env:APP_ID}) | Set-Content installer.py
       (Get-Content installer.py).replace('{{PROD_TOKEN_URL}}', ${env:TOKEN_URL}) | Set-Content installer.py
       (Get-Content installer.py).replace('{{PROD_AUTHORIZATION_URL}}', ${env:AUTHORIZATION_URL}) | Set-Content installer.py
-- task: CmdLine@2
-  name: InstallPyinstaller
-  inputs:
-    script: 'pip install pyinstaller'
+# - task: CmdLine@2
+#   name: InstallPyinstaller
+#   inputs:
+#     script: 'pip install pyinstaller'
 - task: CmdLine@2
   name: BuildBinaries
   inputs:

@@ -93,8 +93,11 @@ with open(path.join(project_dir, '.count'), 'w') as f:
 ohmExe = path.join(project_dir, 'ohmgraphite.exe')
 
 logging.info('Installing ohmgraphite')
-system(f'{ohmExe} install')
-logging.info('Ohmgraphite installation successful!')
+ret = system(f'{ohmExe} install')
+if not ret == 0:
+  logging.exception(f'Installation failed with return code {ret}')
+else:
+  logging.info('Ohmgraphite installation successful!')
 
 print('All services started successfully!')
 

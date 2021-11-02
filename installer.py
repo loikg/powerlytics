@@ -1,10 +1,14 @@
-from os import system, path
+from os import system, , makedirs
 from urllib.request import urlopen
 
 from pathlib import Path
 import json
 
 import time
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 home = str(Path(Path.home()))
 
@@ -57,7 +61,16 @@ ohmgraphite_config = urlopen(ohmgraphite_config_url).read()
 
 ohmgraphite_nlog_content = urlopen(ohmgraphire_nlog_url).read()
 
-system(f'{mkdir} && {npm_init} && {node_red}')
+if not path.exists(project_dir):
+  makedirs(project_dir)
+ 
+logging.basicConfig(level='INFO', filename=f'{project_dir}/logs.txt', format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
+
+logging.info('Installing node-red')
+
+system(f'{npm_init} && {node_red}')
+
+logging.info('node-red installed')
 
 with open(path.join(project_dir, 'ecosystem.config.js'), 'w') as f:
     f.write(data)    
@@ -79,7 +92,9 @@ with open(path.join(project_dir, '.count'), 'w') as f:
 
 ohmExe = path.join(project_dir, 'ohmgraphite.exe')
 
+logging.info('Installing ohmgraphite')
 system(f'{ohmExe} install')
+logging.info('Ohmgraphite installation successful!')
 
 print('All services started successfully!')
 

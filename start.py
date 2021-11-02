@@ -11,3 +11,5 @@ module_path = path.join('node_modules', 'node_red', 'red.js')
 pm2_cmd = f'cd {project_dir} && pm2 start ecosystem.config.js  && ohmgraphite.exe start'
 
 system(pm2_cmd)
+
+print('All services started, please go to http://localhost:1880')

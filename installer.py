@@ -1,4 +1,4 @@
-from os import system, , makedirs
+from os import system, path, makedirs
 from urllib.request import urlopen
 
 from pathlib import Path
@@ -68,7 +68,7 @@ logging.basicConfig(level='INFO', filename=f'{project_dir}/logs.txt', format='%(
 
 logging.info('Installing node-red')
 
-system(f'{npm_init} && {node_red}')
+system(f'cd {project_dir} && {npm_init} && {node_red}')
 
 logging.info('node-red installed')
 
@@ -98,6 +98,6 @@ logging.info('Ohmgraphite installation successful!')
 
 print('All services started successfully!')
 
-print("you can now visit http://localhost:1880 to browse the node-red ui")
+# print("you can now visit http://localhost:1880 to browse the node-red ui")
 
 time.sleep(10)

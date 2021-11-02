@@ -90,10 +90,10 @@ with open(path.join(project_dir, 'NLog.config'), 'wb') as f:
 with open(path.join(project_dir, '.count'), 'w') as f:
   pass
 
-ohmExe = path.join(project_dir, 'ohmgraphite.exe')
+ohmExe = path.join('ohmgraphite.exe')
 
 logging.info('Installing ohmgraphite')
-ret = system(f'{ohmExe} install')
+ret = system(f'cd {project_dir} && {ohmExe} install')
 if not ret == 0:
   logging.exception(f'Installation failed with return code {ret}')
 else:

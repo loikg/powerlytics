@@ -1008,7 +1008,6 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "payloadType": "str",
         "x": 90,
         "y": 240,
         "wires": [
@@ -1393,7 +1392,7 @@
         "z": "9dd6b84e939a9a5d",
         "name": "",
         "props": [],
-        "repeat": "",
+        "repeat": "60",
         "crontab": "",
         "once": false,
         "onceDelay": 0.1,

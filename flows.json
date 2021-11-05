@@ -1013,8 +1013,8 @@
         "y": 240,
         "wires": [
             [
-                "c63f9b377b939e59",
-                "8b82d753ac41d046"
+                "8b82d753ac41d046",
+                "2cd7dac8a2eef039"
             ]
         ]
     },
@@ -1023,7 +1023,7 @@
         "type": "file in",
         "z": "918a6a197ce3a466",
         "name": "",
-        "filename": "metric.csv",
+        "filename": "",
         "format": "utf8",
         "chunk": false,
         "sendError": false,
@@ -1057,7 +1057,7 @@
         "wires": [
             [
                 "e6427d2fa7a8a4b9",
-                "1d70ef4d67b6682e"
+                "e6f556ee01aaeaac"
             ]
         ]
     },
@@ -1094,13 +1094,13 @@
         "type": "file in",
         "z": "918a6a197ce3a466",
         "name": "",
-        "filename": ".count",
+        "filename": "",
         "format": "utf8",
         "chunk": false,
         "sendError": false,
         "encoding": "none",
         "allProps": false,
-        "x": 470,
+        "x": 480,
         "y": 380,
         "wires": [
             [
@@ -1279,6 +1279,13 @@
                 "pt": "msg",
                 "to": "length",
                 "tot": "flow"
+            },
+            {
+                "t": "set",
+                "p": "filename",
+                "pt": "msg",
+                "to": "countFile",
+                "tot": "flow"
             }
         ],
         "action": "",
@@ -1299,12 +1306,12 @@
         "type": "file",
         "z": "918a6a197ce3a466",
         "name": "",
-        "filename": ".count",
+        "filename": "",
         "appendNewline": true,
         "createDir": false,
         "overwriteFile": "true",
         "encoding": "none",
-        "x": 2190,
+        "x": 2140,
         "y": 460,
         "wires": [
             []
@@ -1383,9 +1390,70 @@
         "y": 380,
         "wires": [
             [
-                "9eef6cbe1d97cc91"
+                "9eef6cbe1d97cc91",
+                "157b2de2760389fd"
             ]
         ]
+    },
+    {
+        "id": "2cd7dac8a2eef039",
+        "type": "function",
+        "z": "918a6a197ce3a466",
+        "name": "Get filename",
+        "func": "const today = new Date();\n\nconst year = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(today)\nconst month = new Intl.DateTimeFormat('en', { month: '2-digit' }).format(today)\nconst day = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(today)\n\nreturn {\n    ...msg,\n    filename: `${day}-${month}-${year}-metrics.csv`\n}",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 190,
+        "y": 100,
+        "wires": [
+            [
+                "c63f9b377b939e59"
+            ]
+        ]
+    },
+    {
+        "id": "e6f556ee01aaeaac",
+        "type": "function",
+        "z": "918a6a197ce3a466",
+        "name": "Create or read .count",
+        "func": "const csvFilename = msg.filename;\n\nconst currentCountFilename = `${msg.filename}.count`\n\ntry {\n    fs.accessSync(currentCountFilename, fs.constants.F_OK)\n} catch(e) {\n    node.warn(e)\n    fs.writeFileSync(currentCountFilename, \"\");\n}\n\ntry {\n    let files = fs.readdirSync(\"./\").filter(f => f !== currentCountFilename && f.endsWith(\".count\"));\n    for (const file of files) {\n        fs.rmSync(file, {force: true})\n        node.warn(`Remove old .count: ${file}`)\n    }\n} catch (e) {\n    throw e;\n}\n\nflow.set('countFile', currentCountFilename)\n\nreturn {\n    ...msg,\n    filename: currentCountFilename\n};",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [
+            {
+                "var": "fs",
+                "module": "fs"
+            }
+        ],
+        "x": 400,
+        "y": 320,
+        "wires": [
+            [
+                "1d70ef4d67b6682e"
+            ]
+        ]
+    },
+    {
+        "id": "157b2de2760389fd",
+        "type": "debug",
+        "z": "918a6a197ce3a466",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1740,
+        "y": 300,
+        "wires": []
     },
     {
         "id": "1eedea938681ddca",

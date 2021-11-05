@@ -1008,6 +1008,7 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
+        "payloadType": "str",
         "x": 90,
         "y": 240,
         "wires": [
@@ -1344,7 +1345,7 @@
         "id": "337896f1d5b6cf0c",
         "type": "switch",
         "z": "918a6a197ce3a466",
-        "name": "Is payload empty",
+        "name": "is payload empty",
         "property": "$count(payload.data) <= 0\t",
         "propertyType": "jsonata",
         "rules": [
@@ -1434,7 +1435,7 @@
         "hdrout": "all",
         "multi": "mult",
         "ret": "\\r",
-        "temp": "AppId,TimeStamp,CPUEnergyConsumption,SocEnergyConsumption,DisplayEnergyConsumption,DiskEnergyConsumption,NetworkEnergyConsumption,TotalEnergyConsumption",
+        "temp": "AppId,UserId,TimeStamp,CPUEnergyConsumption,SocEnergyConsumption,DisplayEnergyConsumption,DiskEnergyConsumption,NetworkEnergyConsumption,TotalEnergyConsumption",
         "skip": "0",
         "strings": true,
         "include_empty_strings": "",
@@ -1463,7 +1464,7 @@
                 "module": "path"
             }
         ],
-        "x": 1770,
+        "x": 1870,
         "y": 180,
         "wires": [
             [
@@ -1536,8 +1537,8 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 870,
-        "y": 300,
+        "x": 770,
+        "y": 220,
         "wires": []
     },
     {
@@ -1564,7 +1565,7 @@
         "type": "function",
         "z": "9dd6b84e939a9a5d",
         "name": "Filter out uploaded rows by timestamp",
-        "func": "//For srumutuil timestamp of format: 2021-09-22:06:47:00.0000\nconst srumutilDateRegex = /(\\d{4})-(\\d{2})-(\\d{2}):(\\d{2}):(\\d{2}):(\\d{2}.\\d{4})/;\n\nconst parseSrumutilTimeStamp = (timeStamp) => {\n    const dateArray = srumutilDateRegex.exec(timeStamp);\n    \n    // Param values: new Date(Date.UTC(year, monthIndex, day, hours, minutes, seconds, milliseconds))\n    var parsedDate = new Date(Date.UTC(\n        (+dateArray[1]),\n        (+dateArray[2])-1, // Month is an index so it start at the 0\n        (+dateArray[3]),\n        (+dateArray[4]),\n        (+dateArray[5]),\n        (+dateArray[6])\n    ));\n    return parsedDate;\n}\n\nconst lastUploadedRowDate = new Date(msg.lastUploadedRowDate);\n\nconst firstNewRowIndex = msg.payload.findIndex((row) => {\n    let rowDate\n    try {\n        rowDate = parseSrumutilTimeStamp(row.TimeStamp);\n    } catch(e) {\n        node.warn(\"skip row\")\n        return false\n    }\n    return rowDate > lastUploadedRowDate;\n})\n\nconst rowsSinceLastUplaod = msg.payload.slice(firstNewRowIndex);\nconst lastRowTimeStamp = rowsSinceLastUplaod[rowsSinceLastUplaod.length-1].TimeStamp.trim();\n\nreturn {\n    ...msg,\n    payload: rowsSinceLastUplaod,\n    lastUploadedRowDate: parseSrumutilTimeStamp(lastRowTimeStamp),\n};",
+        "func": "//For srumutuil timestamp of format: 2021-09-22:06:47:00.0000\nconst srumutilDateRegex = /(\\d{4})-(\\d{2})-(\\d{2}):(\\d{2}):(\\d{2}):(\\d{2}.\\d{4})/;\n\nconst parseSrumutilTimeStamp = (timeStamp) => {\n    const dateArray = srumutilDateRegex.exec(timeStamp);\n    \n    // Param values: new Date(Date.UTC(year, monthIndex, day, hours, minutes, seconds, milliseconds))\n    var parsedDate = new Date(Date.UTC(\n        (+dateArray[1]),\n        (+dateArray[2])-1, // Month is an index so it start at the 0\n        (+dateArray[3]),\n        (+dateArray[4]),\n        (+dateArray[5]),\n        (+dateArray[6])\n    ));\n    return parsedDate;\n}\n\nconst lastUploadedRowDate = new Date(msg.lastUploadedRowDate);\n\nconst firstNewRowIndex = msg.payload.findIndex((row) => {\n    let rowDate\n    try {\n        rowDate = parseSrumutilTimeStamp(row.TimeStamp);\n    } catch(e) {\n        node.warn(\"skip row\")\n        return false\n    }\n    return rowDate > lastUploadedRowDate;\n})\n\nif (firstNewRowIndex == -1) {\n    return {\n        ...msg,\n        payload: [],\n        lastUploadedRowDate: null,\n    }\n}\n\nconst rowsSinceLastUplaod = msg.payload.slice(firstNewRowIndex);\nconst lastRowTimeStamp = rowsSinceLastUplaod[rowsSinceLastUplaod.length-1].TimeStamp.trim();\n\nreturn {\n    ...msg,\n    payload: rowsSinceLastUplaod,\n    lastUploadedRowDate: parseSrumutilTimeStamp(lastRowTimeStamp),\n};",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
@@ -1574,7 +1575,8 @@
         "y": 180,
         "wires": [
             [
-                "67ba4c141dda7709"
+                "d265f4729d8170f9",
+                "4bf3ef10257bee94"
             ]
         ]
     },
@@ -1616,7 +1618,7 @@
         "from": "",
         "to": "",
         "reg": false,
-        "x": 1720,
+        "x": 1780,
         "y": 280,
         "wires": [
             [
@@ -1713,5 +1715,49 @@
                 "29a90a18a3230d34"
             ]
         ]
+    },
+    {
+        "id": "d265f4729d8170f9",
+        "type": "switch",
+        "z": "9dd6b84e939a9a5d",
+        "name": "is payload not empty",
+        "property": "$count(payload) > 0\t",
+        "propertyType": "jsonata",
+        "rules": [
+            {
+                "t": "true"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1620,
+        "y": 80,
+        "wires": [
+            [
+                "67ba4c141dda7709"
+            ],
+            []
+        ]
+    },
+    {
+        "id": "4bf3ef10257bee94",
+        "type": "debug",
+        "z": "9dd6b84e939a9a5d",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "true",
+        "targetType": "full",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1520,
+        "y": 300,
+        "wires": []
     }
 ]

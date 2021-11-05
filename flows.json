@@ -654,7 +654,7 @@
         "type": "function",
         "z": "7b38a77803fd0ba6",
         "name": "Create oauth request",
-        "func": "const refreshToken = global.get('refresh_token');\nconst appId = env.get('APP_ID')\n\nreturn {\n    payload: {\n            \"grant_type\": \"refresh_token\",\n            \"client_id\": appId,\n            \"scope\": \"offline_access profile openid email\",\n            \"refresh_token\": refreshToken\n    },\n    headers: {\n        \"content-type\": \"application/x-www-form-urlencoded\"\n    }\n}",
+        "func": "const refreshToken = global.get('refresh_token', 'file');\nconst appId = env.get('APP_ID')\n\nreturn {\n    payload: {\n            \"grant_type\": \"refresh_token\",\n            \"client_id\": appId,\n            \"scope\": \"offline_access profile openid email\",\n            \"refresh_token\": refreshToken\n    },\n    headers: {\n        \"content-type\": \"application/x-www-form-urlencoded\"\n    }\n}",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",

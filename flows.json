@@ -1008,7 +1008,6 @@
         "once": true,
         "onceDelay": 0.1,
         "topic": "",
-        "payloadType": "str",
         "x": 90,
         "y": 240,
         "wires": [
@@ -1255,6 +1254,7 @@
         "type": "subflow:98593475dbf2438d",
         "z": "918a6a197ce3a466",
         "name": "",
+        "env": [],
         "x": 1680,
         "y": 480,
         "wires": [
@@ -1390,8 +1390,7 @@
         "y": 380,
         "wires": [
             [
-                "9eef6cbe1d97cc91",
-                "157b2de2760389fd"
+                "9eef6cbe1d97cc91"
             ]
         ]
     },
@@ -1437,23 +1436,6 @@
                 "1d70ef4d67b6682e"
             ]
         ]
-    },
-    {
-        "id": "157b2de2760389fd",
-        "type": "debug",
-        "z": "918a6a197ce3a466",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1740,
-        "y": 300,
-        "wires": []
     },
     {
         "id": "1eedea938681ddca",
@@ -1643,8 +1625,7 @@
         "y": 180,
         "wires": [
             [
-                "d265f4729d8170f9",
-                "4bf3ef10257bee94"
+                "d265f4729d8170f9"
             ]
         ]
     },
@@ -1776,6 +1757,7 @@
         "type": "subflow:89329242229d0eba",
         "z": "9dd6b84e939a9a5d",
         "name": "",
+        "env": [],
         "x": 230,
         "y": 120,
         "wires": [
@@ -1810,22 +1792,5 @@
             ],
             []
         ]
-    },
-    {
-        "id": "4bf3ef10257bee94",
-        "type": "debug",
-        "z": "9dd6b84e939a9a5d",
-        "name": "",
-        "active": true,
-        "tosidebar": true,
-        "console": false,
-        "tostatus": false,
-        "complete": "true",
-        "targetType": "full",
-        "statusVal": "",
-        "statusType": "auto",
-        "x": 1520,
-        "y": 300,
-        "wires": []
     }
 ]

@@ -7,4 +7,5 @@ node_modules/
 *.log
 *.backup
 *.sys
+*.env
 ecosystem.config.js

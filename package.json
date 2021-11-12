@@ -4,7 +4,7 @@
   "description": "powerlytics",
   "main": "index.js",
   "scripts": {
-    "start": "pm2 start ecosystem.config.js"
+    "start": "node -r dotenv/config ./node_modules/node-red/red.js -D contextStorage.default.module=memory -D contextStorage.file.module=localfilesystem"
   },
   "repository": {
     "type": "git",
@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/loikg/powerlytics#readme",
   "dependencies": {
-    "node-red": "^2.0.6",
-    "pm2": "^5.1.2"
+    "node-red": "^2.0.6"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0"
   }
 }

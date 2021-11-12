@@ -1,12 +1,21 @@
 from os import path, system
-from pathlib import Path
-import json
+import os
+import logging
 
-import time
+logging.getLogger(__name__)
 
-home = str(Path(Path.home()))
-project_dir = path.join(home, 'powerlytics')
+project_dir = 'C:\powerlytics'
+ohm_path = path.join(project_dir, "OhmGraphite.exe")
+nssm_path = path.join(project_dir, "nssm.exe")
+powerlytics_service = "powerlytics"
 
-pm2_cmd = f'cd {project_dir} && pm2 kill  && ohmgraphite.exe stop'
+logging.basicConfig(level='INFO', filename=f'{project_dir}/logs.txt', format='%(asctime)s - %(message)s', datefmt='%d-%b-%y %H:%M:%S')
+os.chdir(project_dir)
 
-system(pm2_cmd)
+start_services_cmd = f'{ohm_path} stop && {nssm_path} stop {powerlytics_service}'
+
+ret = system(start_services_cmd)
+
+if not ret==0:
+    logging.exception(f'Failed to stop all services with code {ret}')
+logging.info('All services stop')

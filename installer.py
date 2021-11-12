@@ -45,9 +45,11 @@ def downloadNSSM(version: str):
   shutil.rmtree(path=path.join(project_dir, nssm_folder))
 
 def install_nodered_service():
+  nodered_user_dir = path.join(project_dir, ".node-red")
+
   os.system(f'{nssm_path} install {powerlytics_service_name} "{node_path}"')
   os.system(f'{nssm_path} set {powerlytics_service_name} AppDirectory {project_dir}')
-  os.system(f'{nssm_path} set {powerlytics_service_name} AppParameters "./node_modules/node-red/red.js -D contextStorage.default.module=memory -D contextStorage.file.module=localfilesystem"')
+  os.system(f'{nssm_path} set {powerlytics_service_name} AppParameters "./node_modules/node-red/red.js --userDir {nodered_user_dir} -D contextStorage.default.module=memory -D contextStorage.file.module=localfilesystem"')
   os.system(f'{nssm_path} set {powerlytics_service_name} AppEnvironmentExtra "NODE_TLS_REJECT_UNAUTHORIZED=0" "API_URL={API_URL}" "APP_ID={APP_ID}" "TOKEN_URL={TOKEN_URL}" "AUTHORIZATION_URL={AUTHORIZATION_URL}"')
   os.system(f'{nssm_path} set {powerlytics_service_name} Start SERVICE_AUTO_START')
   os.system(f'{nssm_path} set {powerlytics_service_name} Start SERVICE_AUTO_START')

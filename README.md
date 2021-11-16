@@ -24,7 +24,7 @@ Node-red will be running at http://localhost:1880
 <b> NOTE: requires python >= 3.7 </b>
 
 ```
-pip install pyinstaller
+pip install pyinstaller pywin32
 
 pyinstaller --onefile --windowed installer.py
 
